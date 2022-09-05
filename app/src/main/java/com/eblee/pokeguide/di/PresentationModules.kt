@@ -8,6 +8,6 @@ import org.koin.dsl.module
 val presentationModules = module {
 
     // ViewModel
-    viewModel { MainViewModel(get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { SplashViewModel(get()) }
 }

@@ -2,23 +2,26 @@ package com.eblee.pokeguide.presentation.view.main
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.eblee.pokeguide.domain.entity.Pokemon
 import com.eblee.pokeguide.domain.use_case.detail.UCGetPokemonInfo
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemon
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemonNextPage
-import com.eblee.pokeguide.domain.use_case.main.UCGetPokemonKoreanName
 import com.eblee.pokeguide.presentation.base.BaseViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
     private val getAllPokemonUseCase: UCGetAllPokemon,
     private val getAllPokemonNextPage: UCGetAllPokemonNextPage,
-    private val getPokemonKoreanName: UCGetPokemonKoreanName,
     private val getPokemonInfo: UCGetPokemonInfo
 ) : BaseViewModel() {
 
     val pokemonListLiveData = MutableLiveData<List<Pokemon>>()
     private var mPokemonList = mutableListOf<Pokemon>()
+
+    val progressbarVisibility = MutableLiveData(View.GONE)
 
     val input = object : MainInput {
         override fun onLoad() {
@@ -32,9 +35,6 @@ class MainViewModel(
 
     val output = object : MainOutput {
         override fun displayPokemonList(pokemonList: List<Pokemon>) {
-            pokemonList.map {
-                getPokemonKoreanName.invoke(it.getId()).subscribe { res -> it.name = res.name }
-            }
             pokemonListLiveData.value = pokemonList
         }
     }
@@ -42,6 +42,14 @@ class MainViewModel(
     @SuppressLint("CheckResult")
     fun getAllPokemon() {
         getAllPokemonUseCase.invoke()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                progressbarVisibility.postValue(View.VISIBLE)
+            }
+            .doAfterTerminate {
+                progressbarVisibility.postValue(View.GONE)
+            }
             .subscribe({
                 mPokemonList = it.toMutableList()
                 output.displayPokemonList(it)

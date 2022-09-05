@@ -13,7 +13,7 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPokemonName(pokemonNameEntity: PokemonNameEntity)
 
-    @Query("SELECT * FROM pokemonName WHERE id =:id")
-    fun getPokemonNameById(id: Int): Single<PokemonNameEntity>
+    @Query("SELECT * FROM pokemonName ORDER BY id LIMIT 20 OFFSET :offset")
+    fun getPokemonNames(offset: Int): Single<List<PokemonNameEntity>>
 
 }

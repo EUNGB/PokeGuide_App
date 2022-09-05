@@ -13,8 +13,7 @@ class PokemonLocalRepositoryImpl(
         db.pokeDao.insertPokemonName(pokemonNameEntity)
     }
 
-    override fun getPokemonNameById(id: Int): Single<PokemonNameEntity> {
-        return db.pokeDao.getPokemonNameById(id)
+    override fun getPokemonNames(offset: Int): Single<List<PokemonNameEntity>> {
+        return db.pokeDao.getPokemonNames(offset)
     }
-
 }

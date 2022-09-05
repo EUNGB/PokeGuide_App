@@ -7,5 +7,5 @@ interface PokemonLocalRepository {
 
     fun insertPokemonKoreanName(pokemonNameEntity: PokemonNameEntity)
 
-    fun getPokemonNameById(id: Int): Single<PokemonNameEntity>
+    fun getPokemonNames(offset: Int = 0): Single<List<PokemonNameEntity>>
 }

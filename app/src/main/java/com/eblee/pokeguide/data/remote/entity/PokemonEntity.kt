@@ -28,4 +28,9 @@ data class PokemonEntity(
     val types: List<TypeEntity>,
     @SerializedName("past_types")
     val pastTypes: List<PastTypeEntity>
-)
+) {
+    companion object {
+        fun PokemonEntity.getImgUrl(): String =
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
+    }
+}

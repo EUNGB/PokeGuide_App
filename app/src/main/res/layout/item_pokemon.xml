@@ -9,11 +9,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clCard"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="110dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/selector_card_background"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,8 +27,9 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="12dp"
             android:text="pokemon"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvName" />
 
@@ -40,9 +40,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="12dp"
             android:text="pokemon"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             android:textStyle="bold"
+            android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -51,7 +52,7 @@
     <ImageView
         android:id="@+id/ivPokemon"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="35dp"
         android:elevation="6dp"

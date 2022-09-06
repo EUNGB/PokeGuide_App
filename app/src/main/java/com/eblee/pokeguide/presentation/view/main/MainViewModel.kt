@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.eblee.pokeguide.domain.entity.Pokemon
+import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.domain.use_case.detail.UCGetPokemonInfo
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemon
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemonNextPage
@@ -18,8 +19,8 @@ class MainViewModel(
     private val getPokemonInfo: UCGetPokemonInfo
 ) : BaseViewModel() {
 
-    val pokemonListLiveData = MutableLiveData<List<Pokemon>>()
-    private var mPokemonList = mutableListOf<Pokemon>()
+    val pokemonListLiveData = MutableLiveData<List<PokemonInfo>>()
+    private var mPokemonList = mutableListOf<PokemonInfo>()
 
     val progressbarVisibility = MutableLiveData(View.GONE)
 
@@ -34,7 +35,7 @@ class MainViewModel(
     }
 
     val output = object : MainOutput {
-        override fun displayPokemonList(pokemonList: List<Pokemon>) {
+        override fun displayPokemonList(pokemonList: List<PokemonInfo>) {
             pokemonListLiveData.value = pokemonList
         }
     }
@@ -79,7 +80,7 @@ interface MainInput : BaseViewModel.Input {
 }
 
 interface MainOutput : BaseViewModel.Output {
-    fun displayPokemonList(pokemonList: List<Pokemon>)
+    fun displayPokemonList(pokemonList: List<PokemonInfo>)
 }
 
 interface MainRoute : BaseViewModel.Route {

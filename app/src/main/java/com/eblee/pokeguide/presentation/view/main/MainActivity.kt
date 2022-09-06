@@ -10,6 +10,7 @@ import com.eblee.pokeguide.R
 import com.eblee.pokeguide.data.utils.PokemonCVSReader.getPokemonNamesByKorean
 import com.eblee.pokeguide.databinding.ActivityMainBinding
 import com.eblee.pokeguide.domain.entity.Pokemon
+import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.presentation.utils.EndlessRecyclerViewScrollListener
 import org.koin.android.ext.android.inject
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.input.onLoad()
     }
 
-    private fun displayList(list: List<Pokemon>) {
+    private fun displayList(list: List<PokemonInfo>) {
         mAdapter.setPokemonList(list)
     }
 

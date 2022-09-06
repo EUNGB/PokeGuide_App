@@ -1,6 +1,7 @@
 package com.eblee.pokeguide.data.remote.entity
 
 
+import com.eblee.pokeguide.presentation.utils.getApiId
 import com.google.gson.annotations.SerializedName
 
 data class PokemonSpeciesEntity(
@@ -46,4 +47,10 @@ data class PokemonSpeciesEntity(
     val formDescriptions: List<FormDescriptionEntity>,
     val genera: List<GeneraEntity>,
     val varieties: List<VarietyEntity>
-)
+) {
+    companion object {
+        fun List<NameEntity>.getKoreanName(): String {
+            return this.firstOrNull() { it.language.url.getApiId() == 3 }?.name ?: ""
+        }
+    }
+}

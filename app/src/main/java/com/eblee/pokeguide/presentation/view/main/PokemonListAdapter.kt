@@ -1,8 +1,8 @@
 package com.eblee.pokeguide.presentation.view.main
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -30,9 +30,12 @@ import com.eblee.pokeguide.data.utils.Constants.TYPE_UNKNOWN
 import com.eblee.pokeguide.data.utils.Constants.TYPE_WATER
 import com.eblee.pokeguide.databinding.ItemPokemonBinding
 import com.eblee.pokeguide.domain.entity.PokemonInfo
+import com.eblee.pokeguide.presentation.utils.RecyclerViewItemClickListener
 import com.eblee.pokeguide.presentation.utils.getApiId
 
 class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.PokemonItemViewHolder>() {
+
+    private var clickListener: RecyclerViewItemClickListener? = null
 
     private var pokemonList = mutableListOf<PokemonInfo>()
 
@@ -83,6 +86,9 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.PokemonItemVi
     override fun onBindViewHolder(holder: PokemonItemViewHolder, position: Int) {
         pokemonList[position].let {
             holder.bind(it)
+            holder.itemView.setOnClickListener {
+                clickListener?.onClick(it, position)
+            }
         }
 
     }
@@ -95,6 +101,18 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.PokemonItemVi
     fun setPokemonList(list: List<PokemonInfo>) {
         pokemonList = list.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun getPokemonInfoByPosition(position: Int) : PokemonInfo{
+        return pokemonList[position]
+    }
+
+    fun setOnItemClickListener(listener: (Int) -> Unit) {
+        this.clickListener = object : RecyclerViewItemClickListener {
+            override fun onClick(view: View, position: Int) {
+                listener(position)
+            }
+        }
     }
 
 }

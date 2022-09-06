@@ -2,9 +2,8 @@ package com.eblee.pokeguide.presentation.view.main
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.eblee.pokeguide.domain.entity.Pokemon
 import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.domain.use_case.detail.UCGetPokemonInfo
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemon
@@ -22,7 +21,9 @@ class MainViewModel(
     val pokemonListLiveData = MutableLiveData<List<PokemonInfo>>()
     private var mPokemonList = mutableListOf<PokemonInfo>()
 
-    val progressbarVisibility = MutableLiveData(View.GONE)
+//    val progressbarVisibility = MutableLiveData(View.GONE)
+
+    private val toDetail = MutableLiveData<PokemonInfo>()
 
     val input = object : MainInput {
         override fun onLoad() {
@@ -32,6 +33,10 @@ class MainViewModel(
         override fun onNextPage(offset: Int) {
             return getAllPokemonNextPage(offset)
         }
+
+        override fun onClickItem(info: PokemonInfo) {
+            toDetail.value = info
+        }
     }
 
     val output = object : MainOutput {
@@ -40,17 +45,15 @@ class MainViewModel(
         }
     }
 
+    val route = object : MainRoute {
+        override fun toDetail(): LiveData<PokemonInfo> = toDetail
+    }
+
     @SuppressLint("CheckResult")
     fun getAllPokemon() {
         getAllPokemonUseCase.invoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                progressbarVisibility.postValue(View.VISIBLE)
-            }
-            .doAfterTerminate {
-                progressbarVisibility.postValue(View.GONE)
-            }
             .subscribe({
                 mPokemonList = it.toMutableList()
                 output.displayPokemonList(it)
@@ -77,6 +80,7 @@ class MainViewModel(
 interface MainInput : BaseViewModel.Input {
     fun onLoad()
     fun onNextPage(offset: Int)
+    fun onClickItem(info: PokemonInfo)
 }
 
 interface MainOutput : BaseViewModel.Output {
@@ -84,5 +88,5 @@ interface MainOutput : BaseViewModel.Output {
 }
 
 interface MainRoute : BaseViewModel.Route {
-    fun toDetail()
+    fun toDetail(): LiveData<PokemonInfo>
 }

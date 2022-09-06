@@ -1,17 +1,19 @@
 package com.eblee.pokeguide.presentation.view.main
 
-import android.os.Build.VERSION_CODES.P
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.eblee.pokeguide.R
-import com.eblee.pokeguide.data.utils.PokemonCVSReader.getPokemonNamesByKorean
 import com.eblee.pokeguide.databinding.ActivityMainBinding
-import com.eblee.pokeguide.domain.entity.Pokemon
 import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.presentation.utils.EndlessRecyclerViewScrollListener
+import com.eblee.pokeguide.presentation.view.detail.DetailActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +37,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter() = with(binding) {
         mAdapter = PokemonListAdapter()
+        mAdapter.setOnItemClickListener { position ->
+            viewModel.input.onClickItem(mAdapter.getPokemonInfoByPosition(position))
+        }
+
         val gridLayoutManager = GridLayoutManager(this@MainActivity, 2)
         rvPokemon.apply {
             adapter = mAdapter
@@ -49,14 +55,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun initObserver() {
         viewModel.pokemonListLiveData.observe(this, ::displayList)
+        viewModel.route.toDetail().observe(this, ::moveDetail)
     }
 
     private fun initUi() {
         viewModel.input.onLoad()
+        loadShimmer()
     }
 
     private fun displayList(list: List<PokemonInfo>) {
         mAdapter.setPokemonList(list)
+        hideShimmer()
     }
 
+    private fun moveDetail(info: PokemonInfo) {
+        startActivity(Intent(this, DetailActivity::class.java).apply {
+            putExtra(EXTRA_POKEMON_ID, info.pokemonEntity.id)
+        })
+    }
+
+    private fun loadShimmer() {
+        binding.shimmerLayout.startShimmer()
+    }
+
+    private fun hideShimmer() {
+        lifecycleScope.launch {
+            delay(1000)
+            binding.shimmerLayout.stopShimmer()
+            binding.shimmerLayout.isGone = true
+            binding.rvPokemon.isVisible = true
+        }
+    }
+
+    companion object {
+        const val EXTRA_POKEMON_ID = "EXTRA_POKEMON_ID"
+    }
 }

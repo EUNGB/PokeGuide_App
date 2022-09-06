@@ -4,6 +4,7 @@ import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.domain.repository.PokemonLocalRepository
 import com.eblee.pokeguide.domain.repository.PokemonRepository
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class UCGetPokemonInfo(
@@ -11,5 +12,7 @@ class UCGetPokemonInfo(
 ) {
     fun invoke(id: Int): Single<PokemonInfo> {
         return pokemonRepository.getPokemonInfo(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 }

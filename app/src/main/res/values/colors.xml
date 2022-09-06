@@ -8,6 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="mask">#CACACA</color>
+    <color name="dark_mask">#A0A0A0</color>
+
     <color name="bug">#A1D960</color>
     <color name="dark">#040706</color>
     <color name="dragon">#378A94</color>

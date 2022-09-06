@@ -2,6 +2,7 @@ package com.eblee.pokeguide.presentation.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.vm = viewModel
+        binding.lifecycleOwner = this
         setContentView(binding.root)
 
         initAdapter()
@@ -47,7 +49,9 @@ class MainActivity : AppCompatActivity() {
             layoutManager = gridLayoutManager
             addOnScrollListener(object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                    viewModel.input.onNextPage(totalItemsCount + 1)
+                    if (totalItemsCount > 1) {
+                        viewModel.input.onNextPage(totalItemsCount + 1)
+                    }
                 }
             })
         }
@@ -56,11 +60,16 @@ class MainActivity : AppCompatActivity() {
     private fun initObserver() {
         viewModel.pokemonListLiveData.observe(this, ::displayList)
         viewModel.route.toDetail().observe(this, ::moveDetail)
+        viewModel.output.showErrorToast().observe(this, ::showToast)
+
     }
 
     private fun initUi() {
         viewModel.input.onLoad()
         loadShimmer()
+        binding.btnSearch.setOnClickListener {
+            viewModel.input.onClickSearch()
+        }
     }
 
     private fun displayList(list: List<PokemonInfo>) {
@@ -85,6 +94,11 @@ class MainActivity : AppCompatActivity() {
             binding.shimmerLayout.isGone = true
             binding.rvPokemon.isVisible = true
         }
+    }
+
+    private fun showToast(message: String) {
+        if (message.isEmpty()) return
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

@@ -26,4 +26,14 @@ interface PokemonApi {
         @Path("id") id: Int
     ): Single<PokemonSpeciesEntity>
 
+    @GET("/api/v2/pokemon/{name}")
+    fun getPokemonInfo(
+        @Path("name") name: String
+    ): Single<PokemonEntity>
+
+    @GET("/api/v2/pokemon-species/{name}")
+    fun getPokemonSpeciesById(
+        @Path("name") name: String
+    ): Single<PokemonSpeciesEntity>
+
 }

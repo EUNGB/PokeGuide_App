@@ -35,4 +35,14 @@ class PokemonRepositoryImpl(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    override fun getSearchPokemonByName(name: String): Single<PokemonInfo> {
+        return Single.zip (
+            api.getPokemonInfo(name).subscribeOn(Schedulers.io()),
+            api.getPokemonSpeciesById(name).subscribeOn(Schedulers.io())
+        ) { info, species ->
+            PokemonInfo(info, species)
+        }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 }

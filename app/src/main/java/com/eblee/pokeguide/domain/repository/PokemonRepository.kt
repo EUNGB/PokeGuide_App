@@ -14,4 +14,5 @@ interface PokemonRepository {
 
     fun getPokemonInfo(id: Int): Single<PokemonInfo>
 
+    fun getSearchPokemonByName(name: String): Single<PokemonInfo>
 }

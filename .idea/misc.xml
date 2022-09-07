@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/compose-model-1662537153411.xml" value="0.33" />
+        <entry key="../../../../../layout/compose-model-1662539773986.xml" value="0.3398148148148148" />
+        <entry key="../../../../../layout/compose-model-1662540528193.xml" value="0.375" />
         <entry key="app/src/main/res/drawable/selector_card_background.xml" value="0.251" />
         <entry key="app/src/main/res/drawable/selector_detail_top_background.xml" value="0.1905" />
         <entry key="app/src/main/res/drawable/selector_shimmer_background.xml" value="0.1905" />
@@ -14,6 +17,7 @@
         <entry key="app/src/main/res/layout/item_pokemon.xml" value="0.3891825358072917" />
         <entry key="app/src/main/res/layout/item_pokemon_skeleton.xml" value="0.259375" />
         <entry key="app/src/main/res/layout/layout_detail_skeleton.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.5151041666666667" />
       </map>
     </option>
   </component>

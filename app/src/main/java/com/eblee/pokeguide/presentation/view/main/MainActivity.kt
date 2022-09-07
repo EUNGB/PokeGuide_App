@@ -3,6 +3,11 @@ package com.eblee.pokeguide.presentation.view.main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -13,10 +18,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.eblee.pokeguide.R
 import com.eblee.pokeguide.databinding.ActivityMainBinding
 import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.presentation.utils.EndlessRecyclerViewScrollListener
 import com.eblee.pokeguide.presentation.view.detail.DetailActivity
+import com.eblee.pokeguide.presentation.view.my_poke.MyPokemonActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -77,6 +84,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnSearch.setOnClickListener {
             viewModel.input.onClickSearch()
         }
+        binding.btnMenu.setOnClickListener {
+            showMenu(it)
+        }
     }
 
     private fun initLauncher() {
@@ -122,6 +132,24 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         if (message.isEmpty()) return
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showMenu(v: View) {
+        PopupMenu(this, v).apply {
+            menuInflater.inflate(R.menu.menu_main, menu)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.myPokemon -> {
+                        startActivity(Intent(this@MainActivity, MyPokemonActivity::class.java))
+                        Toast.makeText(this@MainActivity, "click menu", Toast.LENGTH_SHORT).show()
+                        return@setOnMenuItemClickListener true
+                    }
+                    else -> {
+                        return@setOnMenuItemClickListener false
+                    }
+                }
+            }
+        }.show()
     }
 
     companion object {

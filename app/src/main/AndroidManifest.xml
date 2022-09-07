@@ -17,6 +17,11 @@
         android:theme="@style/Theme.PokeGuide"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.view.my_poke.MyPokemonActivity"
+            android:exported="false"
+            android:label="@string/title_activity_my_pokemon"
+            android:theme="@style/Theme.PokeGuide" />
+        <activity
             android:name=".presentation.view.detail.DetailActivity"
             android:exported="true" />
         <activity

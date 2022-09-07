@@ -7,7 +7,9 @@ import com.eblee.pokeguide.domain.use_case.detail.UCRemoveCatchPokemon
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemon
 import com.eblee.pokeguide.domain.use_case.main.UCGetAllPokemonNextPage
 import com.eblee.pokeguide.domain.use_case.main.UCSearchPokemon
+import com.eblee.pokeguide.domain.use_case.my_poke.UCGetAllCatchPokemon
 import org.koin.dsl.module
+import kotlin.math.sin
 
 val domainModules = module {
 
@@ -25,4 +27,6 @@ val domainModules = module {
     // Splash
     single { UCSavePokemonNames(get()) }
 
+    // MyPokemon
+    single { UCGetAllCatchPokemon(get()) }
 }

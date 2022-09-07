@@ -32,4 +32,8 @@ class PokemonLocalRepositoryImpl(
     override fun removerCatchPokemon(id: Int): Completable {
         return db.pokeDao.removeCatchPokemon(id)
     }
+
+    override fun getAllCatchPokemon(): Single<List<PokemonCatchEntity>> {
+        return db.pokeDao.getAllCatchPokemon()
+    }
 }

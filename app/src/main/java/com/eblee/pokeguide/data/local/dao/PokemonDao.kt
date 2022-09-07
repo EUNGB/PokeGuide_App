@@ -26,4 +26,7 @@ interface PokemonDao {
 
     @Query("DELETE FROM POKEMON_CATCH WHERE id=:id")
     fun removeCatchPokemon(id: Int): Completable
+
+    @Query("SELECT * FROM pokemon_catch ORDER BY id")
+    fun getAllCatchPokemon(): Single<List<PokemonCatchEntity>>
 }

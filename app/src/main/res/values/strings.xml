@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PokeGuide</string>
+    <string name="my_poke">내 포켓몬</string>
+    <string name="title_activity_my_pokemon">MyPokemonActivity</string>
 </resources>

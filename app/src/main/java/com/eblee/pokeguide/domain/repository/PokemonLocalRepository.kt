@@ -16,4 +16,6 @@ interface PokemonLocalRepository {
     fun getIsCatch(id: Int): Single<Boolean>
 
     fun removerCatchPokemon(id: Int): Completable
+
+    fun getAllCatchPokemon() : Single<List<PokemonCatchEntity>>
 }

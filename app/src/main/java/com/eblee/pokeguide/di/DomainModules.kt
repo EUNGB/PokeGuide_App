@@ -14,7 +14,7 @@ val domainModules = module {
     // UseCase
     // Main
     single { UCGetAllPokemon(get(), get()) }
-    single { UCGetAllPokemonNextPage(get()) }
+    single { UCGetAllPokemonNextPage(get(), get()) }
     single { UCSearchPokemon(get()) }
 
     // Detail

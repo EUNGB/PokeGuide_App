@@ -5,5 +5,6 @@ import com.eblee.pokeguide.data.remote.entity.PokemonSpeciesEntity
 
 data class PokemonInfo(
     val pokemonEntity: PokemonEntity,
-    val pokemonSpeciesEntity: PokemonSpeciesEntity
+    val pokemonSpeciesEntity: PokemonSpeciesEntity,
+    var isCatch: Boolean = false
 )

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.eblee.pokeguide.R
@@ -44,6 +45,7 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.PokemonItemVi
             with(binding) {
                 tvNum.text = pokemon.pokemonEntity.id.toString()
                 tvName.text = pokemon.pokemonSpeciesEntity.names.first { it.language.url.getApiId() == 3 }.name
+                ivBall.isVisible = pokemon.isCatch
                 Glide.with(root.context)
                     .load(pokemon.pokemonEntity.getImgUrl())
                     .into(ivPokemon)

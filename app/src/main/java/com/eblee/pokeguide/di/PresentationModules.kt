@@ -11,5 +11,5 @@ val presentationModules = module {
     // ViewModel
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel { SplashViewModel(get()) }
-    viewModel { DetailViewModel(get()) }
+    viewModel { DetailViewModel(get(), get(), get()) }
 }

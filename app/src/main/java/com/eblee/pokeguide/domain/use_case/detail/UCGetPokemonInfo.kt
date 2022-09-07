@@ -8,11 +8,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class UCGetPokemonInfo(
-    private val pokemonRepository: PokemonRepository
+    private val pokemonRepository: PokemonRepository,
+    private val pokemonLocalRepository: PokemonLocalRepository
 ) {
     fun invoke(id: Int): Single<PokemonInfo> {
-        return pokemonRepository.getPokemonInfo(id)
-            .subscribeOn(Schedulers.io())
+        return Single.zip(
+            pokemonRepository.getPokemonInfo(id).subscribeOn(Schedulers.io()),
+            pokemonLocalRepository.getIsCatch(id).subscribeOn(Schedulers.io())
+        ) { info, isCatch ->
+            PokemonInfo(
+                info.pokemonEntity,
+                info.pokemonSpeciesEntity,
+                isCatch
+            )
+        }
             .observeOn(AndroidSchedulers.mainThread())
     }
 }

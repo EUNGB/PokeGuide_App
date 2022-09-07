@@ -1,8 +1,12 @@
 package com.eblee.pokeguide.presentation.view.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -25,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mAdapter: PokemonListAdapter
 
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -35,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         initAdapter()
         initObserver()
         initUi()
+        initLauncher()
     }
 
     private fun initAdapter() = with(binding) {
@@ -72,13 +79,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initLauncher() {
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let {
+                    val id = it.getIntExtra("id", -1)
+                    if (id != -1) {
+                        viewModel.pokemonListLiveData.value!!.find { it.pokemonEntity.id == id }?.let { findPokemon ->
+                            findPokemon.isCatch = it.getBooleanExtra("isCatch", false)
+                            mAdapter.notifyItemChanged(id - 1)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun displayList(list: List<PokemonInfo>) {
         mAdapter.setPokemonList(list)
         hideShimmer()
     }
 
     private fun moveDetail(info: PokemonInfo) {
-        startActivity(Intent(this, DetailActivity::class.java).apply {
+        activityResultLauncher.launch(Intent(this, DetailActivity::class.java).apply {
             putExtra(EXTRA_POKEMON_ID, info.pokemonEntity.id)
         })
     }

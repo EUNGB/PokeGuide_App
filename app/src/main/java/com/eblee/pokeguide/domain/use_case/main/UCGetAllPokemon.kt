@@ -7,6 +7,7 @@ import com.eblee.pokeguide.domain.entity.Pokemon
 import com.eblee.pokeguide.domain.entity.PokemonInfo
 import com.eblee.pokeguide.domain.repository.PokemonLocalRepository
 import com.eblee.pokeguide.domain.repository.PokemonRepository
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,7 +18,8 @@ import kotlin.collections.ArrayList
 
 
 class UCGetAllPokemon(
-    private val pokemonRepository: PokemonRepository
+    private val pokemonRepository: PokemonRepository,
+    private val pokemonLocalRepository: PokemonLocalRepository
 ) {
 
     @SuppressLint("CheckResult")
@@ -31,6 +33,24 @@ class UCGetAllPokemon(
             it.toList() as List<PokemonInfo>
         }
             .subscribeOn(Schedulers.io())
+            .flatMapPublisher {
+                Flowable.fromIterable(it)
+            }
+            .flatMapSingle { pokemon ->
+                pokemonLocalRepository.getIsCatch(pokemon.pokemonEntity.id)
+                    .subscribeOn(Schedulers.io())
+                    .map {
+                        PokemonInfo(
+                            pokemon.pokemonEntity,
+                            pokemon.pokemonSpeciesEntity,
+                            it
+                        )
+                    }
+            }
+            .toList()
+            .map { list ->
+                list.sortedBy { it.pokemonEntity.id }
+            }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

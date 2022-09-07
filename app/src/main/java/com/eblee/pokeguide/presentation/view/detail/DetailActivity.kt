@@ -1,5 +1,7 @@
 package com.eblee.pokeguide.presentation.view.detail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.DrawableCompat
@@ -11,15 +13,19 @@ import com.eblee.pokeguide.data.remote.entity.PokemonEntity.Companion.getImgUrl
 import com.eblee.pokeguide.data.remote.entity.PokemonSpeciesEntity.Companion.getKoreanName
 import com.eblee.pokeguide.data.utils.Constants
 import com.eblee.pokeguide.databinding.ActivityDetailBinding
+import com.eblee.pokeguide.presentation.view.main.MainActivity
 import com.eblee.pokeguide.presentation.view.main.MainActivity.Companion.EXTRA_POKEMON_ID
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import kotlin.properties.Delegates
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
     private val viewModel: DetailViewModel by inject()
+
+    private var saveIsCatchState by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +44,7 @@ class DetailActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 viewModel.pokemonNameLiveData.value = it.pokemonSpeciesEntity.names.getKoreanName()
                 viewModel.pokemonImgUrlLiveData.value = it.pokemonEntity.getImgUrl()
+                saveIsCatchState = it.isCatch
                 changeBackgroundColor(it.pokemonEntity.types.first().type.name)
                 delay(1500)
                 hideShimmer()
@@ -47,6 +54,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initUi() {
         loadShimmer()
+        binding.ivUnCatch.setOnClickListener { viewModel.input.clickCatch() }
+        binding.ivCatch.setOnClickListener { viewModel.input.clickRemove() }
     }
 
     private fun changeBackgroundColor(type: String) {
@@ -90,5 +99,18 @@ class DetailActivity : AppCompatActivity() {
         binding.ivPokemon.isVisible = true
     }
 
+    override fun onBackPressed() {
+        if (saveIsCatchState != viewModel.isCatch.value) moveBack()
+        super.onBackPressed()
+
+    }
+
+    private fun moveBack() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("id", viewModel.pokemonInfoLiveData.value!!.pokemonEntity.id)
+        intent.putExtra("isCatch", viewModel.isCatch.value)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
 
 }

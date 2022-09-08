@@ -16,12 +16,13 @@
 
 package com.eblee.pokeguide.presentation.utils
 
+import android.content.Context
 import com.eblee.pokeguide.R
 
 object PokemonTypeUtils {
 
-    fun getTypeColor(type: String): Int {
-        return when (type) {
+    fun Context.getTypeColor(type: String): Int {
+        val colorId = when (type) {
             "fighting" -> R.color.fighting
             "flying" -> R.color.flying
             "poison" -> R.color.poison
@@ -41,5 +42,6 @@ object PokemonTypeUtils {
             "dark" -> R.color.dark
             else -> R.color.gray_21
         }
+        return this.getColor(colorId)
     }
 }
